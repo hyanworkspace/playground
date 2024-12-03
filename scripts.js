@@ -38,7 +38,6 @@ const peer = new Peer(undefined, {
     port: 443,
 });
 
-// 获取本地视频流
 navigator.mediaDevices.getUserMedia({
     video: true,
     audio: false
@@ -66,6 +65,32 @@ peer.on('connection', function(conn) {
     });
 });
 
+function createEffectControls(video, container) {
+    const controlsDiv = document.createElement('div');
+    controlsDiv.className = 'effect-controls';
+    
+    effects.forEach(effect => {
+        const button = document.createElement('button');
+        button.className = 'effect-button';
+        if (effect.name === '正常') button.classList.add('active');
+        button.textContent = effect.name;
+        
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons in this container
+            container.querySelectorAll('.effect-button').forEach(btn => 
+                btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+            // Apply the effect
+            video.style.filter = effect.filter;
+        });
+        
+        controlsDiv.appendChild(button);
+    });
+    
+    return controlsDiv;
+}
+
 function addVideoStream(stream, userId, isLocal) {
     const videoContainer = document.createElement('div');
     videoContainer.className = 'videoContainer';
@@ -75,27 +100,15 @@ function addVideoStream(stream, userId, isLocal) {
         video.play();
     });
     
-    // 随机选择一个效果
-    const effect = effects[Math.floor(Math.random() * effects.length)];
-    video.style.filter = effect.filter;
-    
-    const effectInfo = document.createElement('div');
-    effectInfo.className = 'effect-info';
-    effectInfo.textContent = `效果: ${effect.name}`;
-    
     videoContainer.appendChild(video);
-    videoContainer.appendChild(effectInfo);
+    
+    // Add effect controls
+    const controls = createEffectControls(video, videoContainer);
+    videoContainer.appendChild(controls);
+    
     videoGrid.appendChild(videoContainer);
-
-    // 每30秒随机改变一次效果
-    setInterval(() => {
-        const newEffect = effects[Math.floor(Math.random() * effects.length)];
-        video.style.filter = newEffect.filter;
-        effectInfo.textContent = `效果: ${newEffect.name}`;
-    }, 30000);
 }
 
-// 连接到新用户
 peer.on('call', call => {
     navigator.mediaDevices.getUserMedia({
         video: true,
@@ -108,7 +121,6 @@ peer.on('call', call => {
     });
 });
 
-// 错误处理
 peer.on('error', err => {
     console.error('PeerJS error:', err);
     document.getElementById('connectionStatus').textContent = '连接错误: ' + err.type;

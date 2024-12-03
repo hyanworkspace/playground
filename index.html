@@ -3,14 +3,34 @@
 <head>
     <base href="." />
     <meta charset="utf-8">
-    <title>Playground</title>
+    <title>多人视频变换画廊</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="connectionStatus">正在连接...</div>
-    <div id="videoGrid"></div>
+        <div id="connectionStatus">正在连接...</div>
+        <div id="videoGrid"></div>
 
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="scripts.js"></script>
-</body>
+    </body>
 </html>
+    
+    <!-- 这个更新后的版本做了以下改进：
+    
+    1. 移除了自动随机切换效果的功能
+    2. 为每个视频添加了效果控制按钮组
+    3. 用户可以通过点击按钮自由切换不同的视觉效果
+    4. 当前选中的效果按钮会高亮显示
+    5. 按钮布局采用响应式设计，在空间不足时会自动换行
+    6. 保留了所有现有的视觉效果选项
+    7. 默认使用"正常"效果
+    
+    使用方法：
+    1. 打开网页后会自动请求摄像头权限
+    2. 允许后会看到自己的视频画面
+    3. 在每个视频下方都有一排效果按钮
+    4. 点击不同的按钮可以切换不同的视觉效果
+    5. 当前生效的效果按钮会高亮显示
+    6. 多个用户打开同一网页后会自动连接，每个用户都可以独立控制自己看到的效果
+    
+    这个实现让用户拥有了更多的控制权，可以根据自己的喜好随时切换不同的视觉效果。 -->
